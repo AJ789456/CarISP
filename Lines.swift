@@ -19,8 +19,10 @@ class Lines: RenderableEntity {
     var line6a = Rect(topLeft:Point(x: 0, y: 760), size:Size(width: 20, height: 100))
     var canvasEnd = 0
     var num = 0
-    var speed = 4    
-    var pause = false
+    var count = 0
+//    var speed = 4
+//    let obstacles = Obstacles()
+//    var pause = false
 
  //   func stopper() {
  //       pause = true
@@ -66,23 +68,24 @@ class Lines: RenderableEntity {
         let line6aRect = Rectangle(rect: line6a)
         let white = FillStyle(color: Color(.white))
         canvas.render(white, line0Rect, line1Rect, line2Rect, line3Rect, line4Rect, line5Rect, line6Rect, line0aRect, line1aRect, line2aRect, line3aRect, line4aRect, line5aRect, line6aRect)
-        print("dis is in da line \(pause)")
-        if pause == false {
-            line0.topLeft.y += speed
-            line1.topLeft.y += speed
-            line2.topLeft.y += speed
-            line3.topLeft.y += speed
-            line4.topLeft.y += speed
-            line5.topLeft.y += speed
-            line6.topLeft.y += speed
-            line0a.topLeft.y += speed
-            line1a.topLeft.y += speed
-            line2a.topLeft.y += speed
-            line3a.topLeft.y += speed
-            line4a.topLeft.y += speed
-            line5a.topLeft.y += speed
-            line6a.topLeft.y += speed
+//        print("dis is in da line \(pause)")
+        guard let layer = layer as? InteractionLayer else {
+            fatalError("InteractionLayer required")
         }
+        line0.topLeft.y += layer.roadSpeed
+        line1.topLeft.y += layer.roadSpeed
+        line2.topLeft.y += layer.roadSpeed
+        line3.topLeft.y += layer.roadSpeed
+        line4.topLeft.y += layer.roadSpeed
+        line5.topLeft.y += layer.roadSpeed
+        line6.topLeft.y += layer.roadSpeed
+        line0a.topLeft.y += layer.roadSpeed
+        line1a.topLeft.y += layer.roadSpeed
+        line2a.topLeft.y += layer.roadSpeed
+        line3a.topLeft.y += layer.roadSpeed
+        line4a.topLeft.y += layer.roadSpeed
+        line5a.topLeft.y += layer.roadSpeed
+        line6a.topLeft.y += layer.roadSpeed
         if line6.topLeft.y > canvasEnd {
             line6.topLeft.y = line0.topLeft.y - 150
         }
@@ -125,9 +128,9 @@ class Lines: RenderableEntity {
         if line0a.topLeft.y > canvasEnd {
             line0a.topLeft.y = line1a.topLeft.y - 150
         }
-        if num % 200 == 0 && speed < 15 && !(speed == 0) {
-            speed += 1
+        if count % 200 == 0 && layer.roadSpeed < 15 && !(layer.roadSpeed == 0) {
+            layer.roadSpeed += 1
         }
-        num += 1
+        count += 1            
     }
 }

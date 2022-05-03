@@ -12,7 +12,10 @@ class InteractionLayer : Layer, KeyDownHandler {
     let car = Car()
     let score = Score()
     let obstacles = Obstacles()
-        
+    var roadSpeed = 4
+    var count = 0
+
+    
     init() {
         // Using a meaningful name can be helpful for debugging
         super.init(name:"Interaction")
@@ -33,13 +36,13 @@ class InteractionLayer : Layer, KeyDownHandler {
         dispatcher.unregisterKeyDownHandler(handler: self)
     }
 
-    
+
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
-        if key == "d" {
+        if key == "d" && roadSpeed != 0 {
             car.mRight = true
             obstacles.mRight = true
         }
-        if key == "a" {
+        if key == "a" && roadSpeed != 0 {
             car.mLeft = true
             obstacles.mLeft = true
         }

@@ -7,6 +7,7 @@ class Score: RenderableEntity {
     var xPos = 0
     var adjust = false
     var count = 0
+    let obstacles = Obstacles()
 
     func renderText(canvas: Canvas, x: Int, y: Int, text: String){
         let Text = Text(location: Point(x: x, y: y), text: text)
@@ -37,7 +38,10 @@ class Score: RenderableEntity {
         }
         renderText(canvas: canvas, x: xPos, y: 40, text: String(score))
         count += 1
-        if count % 2 == 0 {
+        guard let layer = layer as? InteractionLayer else {
+            fatalError("InteractionLayer required")
+        }
+        if count % 2 == 0 && layer.roadSpeed != 0 {
             score += 1
         }
     }

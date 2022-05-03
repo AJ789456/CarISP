@@ -14,7 +14,6 @@ class Obstacles: RenderableEntity {
     var rightL = 0
     var yPos = 0
     var canvasEnd = 0
-    var speed2 = 4
     var middle = 0
     var mRight = false
     var mLeft = false
@@ -22,12 +21,14 @@ class Obstacles: RenderableEntity {
     var index = 0
     var lefting = false
     var righting = false
+    var distance = 0
     var list = [Int]()
     var carBoundingRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: 0, height: 0))
     var catBoundingRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: 0, height: 0))
     var coneBoundingRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: 0, height: 0))
     var grannyBoundingRect = Rect(topLeft: Point(x: 0, y: 0), size: Size(width: 0, height: 0))
-    let lines = Lines()
+//    let lines = Lines()
+//    var pause = false
 //    var stopper = false
     
     init() {
@@ -66,30 +67,32 @@ class Obstacles: RenderableEntity {
     }
    
     override func render(canvas:Canvas) {
-        if mLeft && moved < 22 && !(middle == (leftL-83)) && !righting {
+        if mLeft && moved < 22 && distance > -1 && !righting {
             lefting = true
             middle -= 10
             moved += 1
-        } else if middle == (rightL - 83) {
+        } else if distance == -1 {
             mLeft = false
         }
         
         if moved == 22 && mLeft {
             moved = 0
+            distance -= 1
             mLeft = false
             lefting = false
         }
 
-        if mRight && moved < 22 && !(middle == (rightL - 83)) && !lefting{
+        if mRight && moved < 22 && distance < 1 && !lefting{
             righting = true
             middle += 10
             moved += 1
-        } else if middle == (rightL - 83) {
+        } else if distance == 1 {
             mRight = false
         }
 
         if moved == 22 && mRight {
             moved = 0
+            distance += 1
             mRight = false
             righting = false
         }
@@ -98,33 +101,33 @@ class Obstacles: RenderableEntity {
         grannyBoundingRect = Rect(topLeft: Point(x: list[index]-75, y: yPos-125), size: Size(width:150, height: 110))
         coneBoundingRect = Rect(topLeft: Point(x: list[index]-50, y: yPos-60), size: Size(width:100, height: 40))
         carBoundingRect = Rect(topLeft: Point(x: middle, y: canvasEnd-280), size : Size(width: 166, height: 250))
-        canvas.render(Rectangle(rect: carBoundingRect))
+//        canvas.render(Rectangle(rect: carBoundingRect))
 
         if cat.isReady && when == 1 {
             cat.renderMode = .destinationRect(Rect(topLeft:Point(x:list[index]-50, y:yPos-100), size:Size(width: 100, height:100)))
-            canvas.render(Rectangle(rect: catBoundingRect))
+//            canvas.render(Rectangle(rect: catBoundingRect))
             canvas.render(cat)
         }
         
         if granny.isReady && when == 2 {
             granny.renderMode = .destinationRect(Rect(topLeft:Point(x:list[index]-70, y:yPos-150), size:Size(width: 150, height:150)))
-            canvas.render(Rectangle(rect: grannyBoundingRect))
+//            canvas.render(Rectangle(rect: grannyBoundingRect))
             canvas.render(granny)
             
         }
         
         if cone.isReady && when == 3 {
             cone.renderMode = .destinationRect(Rect(topLeft:Point(x:list[index]-50, y:yPos-100), size:Size(width: 100, height:100)))
-            canvas.render(Rectangle(rect: coneBoundingRect))
+//            canvas.render(Rectangle(rect: coneBoundingRect))
             canvas.render(cone)
             
         }
         
-        if hoes.isReady && when == 4 {
-            hoes.renderMode = .destinationRect(Rect(topLeft:Point(x:list[index]-75, y:yPos-150), size:Size(width: 150, height:150)))
-            canvas.render(hoes)
-            
-        }
+//        if hoes.isReady && when == 4 {
+//            hoes.renderMode = .destinationRect(Rect(topLeft:Point(x:list[index]-75, y:yPos-150), size:Size(width: 150, height:150)))
+//            canvas.render(hoes)
+//            
+//        }
     }
     override func calculate(canvasSize: Size) {
         let containmentCat = catBoundingRect.containment(target: carBoundingRect)
@@ -132,40 +135,30 @@ class Obstacles: RenderableEntity {
         let containmentCone = coneBoundingRect.containment(target: carBoundingRect)
         
         
+        guard let layer = layer as? InteractionLayer else {
+            fatalError("InteractionLayer required")
+        }
 
         if !containmentCat.intersection([.contact]).isEmpty && when == 1{
-            lines.pause = true
-            speed2 = 0
-            print("this is in obstacoes \(lines.pause)")
-            
+            layer.roadSpeed = 0          
         }
         
-        
-
         if !containmentGranny.intersection([.contact]).isEmpty && when == 2{
-            speed2 = 0
-//            lines.stopper()
+            layer.roadSpeed = 0
         }
-
         
-
         if !containmentCone.intersection([.contact]).isEmpty && when == 3{
-            speed2 = 0
-//            lines.stopper()
+            layer.roadSpeed = 0
         }
 
         
         if yPos > (canvasEnd) {
             yPos = 0
-            when = Int.random(in: 1 ... 4)
+            when = Int.random(in: 1 ... 3)
             index = Int.random(in: 0 ... 2)
         } else {
-            yPos += speed2
+            yPos += layer.roadSpeed
         }
-        if count % 200 == 0 && speed2 < 15 && !(speed2 == 0) {
-            speed2 += 1
-        }
-        count += 1
     }
 }
 
