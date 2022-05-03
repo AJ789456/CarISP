@@ -7,13 +7,16 @@ import Igis
 
 
 class Background : RenderableEntity {
-
+//Creates a rect for the "grass" portion
     var grass = Rect(topLeft:Point(x: 0, y: 0), size: Size(width: 0, height: 0))
+//The color green
     let green = FillStyle(color:Color(.lightgreen))
-
-    var road = Rect(topLeft:Point(x: 0, y: 0), size: Size(width: 0, height: 0))
+//Creates a rect for the "road" portion
+    var road = Rect(topLeft:Point(x: 0, y: 0), size: Size(width: 660, height: 0))
+//The color gray
     let gray = FillStyle(color:Color(.gray))
-    
+
+//Function to render a rectangle
     func renderRectangle(canvas: Canvas, rect: Rect, color: Color.Name) {
         let rectangle = Rectangle(rect: rect)
         let fill = FillStyle(color: Color(color))
@@ -26,15 +29,16 @@ class Background : RenderableEntity {
     }
 
     override func setup(canvasSize:Size, canvas:Canvas) {
+//Size of the grass rect is entire canvas
         grass.size = canvasSize
-        
+//The road's x-position is in the middle        
         road.topLeft.x = canvasSize.width/2 - 330
-        road.size.width = 660
+//The road is as tall as the canvas
         road.size.height = canvasSize.height
         
     }    
     
-
+//Function to clear the canvas so that frames to not overlap
     func clearCanvas(canvas:Canvas) {
         if let canvasSize = canvas.canvasSize {
             let canvasRect = Rect(topLeft:Point(), size:canvasSize)
@@ -44,7 +48,9 @@ class Background : RenderableEntity {
     }
 
     override func render(canvas: Canvas) {
+//Clears the canvas
         clearCanvas(canvas: canvas)
+//Render the grass rect as green and the road rect as gray
         let grassRect = Rectangle(rect:grass)
         canvas.render(green, grassRect)
         let roadRect = Rectangle(rect:road)

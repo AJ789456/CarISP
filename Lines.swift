@@ -2,7 +2,7 @@ import Igis
 import Scenes
 
 class Lines: RenderableEntity {
-
+//Creates a rectangle for every line we need
     var line0 = Rect(topLeft:Point(x: 0, y: -140), size:Size(width: 20, height: 100))
     var line1 = Rect(topLeft:Point(x: 0, y: 10), size:Size(width: 20, height: 100))
     var line2 = Rect(topLeft:Point(x: 0, y: 160), size:Size(width: 20, height: 100))
@@ -17,23 +17,17 @@ class Lines: RenderableEntity {
     var line4a = Rect(topLeft:Point(x: 0, y: 460), size:Size(width: 20, height: 100))
     var line5a = Rect(topLeft:Point(x: 0, y: 610), size:Size(width: 20, height: 100))
     var line6a = Rect(topLeft:Point(x: 0, y: 760), size:Size(width: 20, height: 100))
+//Variable to see where the bottomm of the canvas is
     var canvasEnd = 0
-    var num = 0
+//Counts the amount of frames
     var count = 0
-//    var speed = 4
-//    let obstacles = Obstacles()
-//    var pause = false
-
- //   func stopper() {
- //       pause = true
- //       print(pause)
- //   }
     
     init() {
         super.init(name: "Lines")
     }
     
     override func setup(canvasSize: Size, canvas: Canvas) {
+//Set the lines' x-position correctly, either on the left or right
         line0.topLeft.x = canvasSize.width / 2 - 120
         line1.topLeft.x = canvasSize.width / 2 - 120
         line2.topLeft.x = canvasSize.width / 2 - 120
@@ -48,10 +42,12 @@ class Lines: RenderableEntity {
         line4a.topLeft.x = canvasSize.width / 2 + 100
         line5a.topLeft.x = canvasSize.width / 2 + 100
         line6a.topLeft.x = canvasSize.width / 2 + 100
+//Calculates where the end of the canvas is
         canvasEnd = canvasSize.height
     }
         
     override func render(canvas:Canvas) {
+//Turns all the rects into renderable rectangles
         let line0Rect = Rectangle(rect: line0)
         let line1Rect = Rectangle(rect: line1)
         let line2Rect = Rectangle(rect: line2)
@@ -66,12 +62,15 @@ class Lines: RenderableEntity {
         let line4aRect = Rectangle(rect: line4a)
         let line5aRect = Rectangle(rect: line5a)
         let line6aRect = Rectangle(rect: line6a)
+//Line color
         let white = FillStyle(color: Color(.white))
+//Renders the color and all the lines
         canvas.render(white, line0Rect, line1Rect, line2Rect, line3Rect, line4Rect, line5Rect, line6Rect, line0aRect, line1aRect, line2aRect, line3aRect, line4aRect, line5aRect, line6aRect)
-//        print("dis is in da line \(pause)")
+//Allows us to access the road speed from Interactionlayer
         guard let layer = layer as? InteractionLayer else {
             fatalError("InteractionLayer required")
         }
+//Moves all the lines down the desired amount as determined by speed
         line0.topLeft.y += layer.roadSpeed
         line1.topLeft.y += layer.roadSpeed
         line2.topLeft.y += layer.roadSpeed
@@ -86,6 +85,7 @@ class Lines: RenderableEntity {
         line4a.topLeft.y += layer.roadSpeed
         line5a.topLeft.y += layer.roadSpeed
         line6a.topLeft.y += layer.roadSpeed
+//Calculates if the lines are off the page and brings them back to the top
         if line6.topLeft.y > canvasEnd {
             line6.topLeft.y = line0.topLeft.y - 150
         }
@@ -128,6 +128,7 @@ class Lines: RenderableEntity {
         if line0a.topLeft.y > canvasEnd {
             line0a.topLeft.y = line1a.topLeft.y - 150
         }
+//Increases the speed every 200 frames for more fun
         if count % 200 == 0 && layer.roadSpeed < 15 && !(layer.roadSpeed == 0) {
             layer.roadSpeed += 1
         }
