@@ -1,5 +1,6 @@
 import Scenes
 import Igis
+import Foundation
 
   /*
      This class is responsible for rendering the background.
@@ -15,7 +16,9 @@ class Background : RenderableEntity {
     var road = Rect(topLeft:Point(x: 0, y: 0), size: Size(width: 660, height: 0))
 //The color gray
     let gray = FillStyle(color:Color(.gray))
-
+    
+    let crab: Audio
+    var isPlaying = false
 //Function to render a rectangle
     func renderRectangle(canvas: Canvas, rect: Rect, color: Color.Name) {
         let rectangle = Rectangle(rect: rect)
@@ -25,6 +28,11 @@ class Background : RenderableEntity {
     
     init() {
         // Using a meaningful name can be helpful for debugging
+        guard let crabURL = URL(string:"https://codermerlin.com/users/avanish-jeendru/CrabRave.mp3") else {
+            fatalError("Failed to create URL for Crab Rave")
+        }
+
+        crab = Audio(sourceURL: crabURL, shouldLoop: true)
         super.init(name:"Background")
     }
 
@@ -35,7 +43,7 @@ class Background : RenderableEntity {
         road.topLeft.x = canvasSize.width/2 - 330
 //The road is as tall as the canvas
         road.size.height = canvasSize.height
-        
+        canvas.setup(crab)
     }    
     
 //Function to clear the canvas so that frames to not overlap
@@ -55,5 +63,10 @@ class Background : RenderableEntity {
         canvas.render(green, grassRect)
         let roadRect = Rectangle(rect:road)
         canvas.render(gray, roadRect)
+
+        if !isPlaying && crab.isReady {
+            canvas.render(crab)
+            isPlaying = true
+        }
     }
 }

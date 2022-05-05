@@ -165,7 +165,7 @@ class Obstacles: RenderableEntity {
         }
 
 //If the obstacles' y-position passes the end of the canvas, reset them to the top
-        if yPos > canvasEnd {
+        if yPos > canvasEnd+50 {
             yPos = 0
 //Randomizes the image
             when = Int.random(in: 1 ... 3)

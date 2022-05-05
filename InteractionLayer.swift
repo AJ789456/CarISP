@@ -13,7 +13,7 @@ class InteractionLayer : Layer, KeyDownHandler {
     let score = Score()
     let obstacles = Obstacles()
 //Speed of everything
-    var roadSpeed = 4
+    var roadSpeed = 5
 //Counts the frames
     var count = 0
 
@@ -28,7 +28,6 @@ class InteractionLayer : Layer, KeyDownHandler {
         insert(entity: obstacles, at: .front)
         insert(entity: car, at: .front)
         insert(entity: score, at: .front)
-
     }
 //?
     override func preSetup(canvasSize: Size, canvas: Canvas) {
@@ -65,6 +64,9 @@ class InteractionLayer : Layer, KeyDownHandler {
             score.score = 0
 //Put the obstacle back at the top
             obstacles.yPos = 0
+        }
+        if key == "4" && altKey {
+            car.appaMode = !car.appaMode
         }
     }
 }

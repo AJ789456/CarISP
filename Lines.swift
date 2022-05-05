@@ -129,7 +129,7 @@ class Lines: RenderableEntity {
             line0a.topLeft.y = line1a.topLeft.y - 150
         }
 //Increases the speed every 200 frames for more fun
-        if count % 200 == 0 && layer.roadSpeed < 15 && !(layer.roadSpeed == 0) {
+        if count % 200 == 0 && layer.roadSpeed < 20 && !(layer.roadSpeed == 0) {
             layer.roadSpeed += 1
         }
         count += 1            

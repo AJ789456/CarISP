@@ -3,8 +3,9 @@ import Scenes
 import Foundation
 
 class Car: RenderableEntity {
-//Image of car
+//Image of car and Appa
     let car: Image
+    let appa: Image
 //X-position of the car
     var middle = 0
 //Lower end of the canvas
@@ -19,14 +20,21 @@ class Car: RenderableEntity {
 //Booleans to see if the car is in the process of moving for a smoother transition  
     var lefting = false
     var righting = false
+    var appaMode = false
     
     init() {
 //Creates the car's URL
         guard let carURL = URL(string:"https://codermerlin.com/users/avanish-jeendru/mustang.png") else {
             fatalError("Failed to create URL for Car")
         }
+
+        guard let appaURL = URL(string:"https://codermerlin.com/users/avanish-jeendru/appa.png") else {
+            fatalError("Failed to create URL for Appa")
+        }
+        
 //Makes car the desired image        
         car = Image(sourceURL: carURL)
+        appa = Image(sourceURL: appaURL)
       
         super.init(name: "Car")
                 
@@ -35,6 +43,7 @@ class Car: RenderableEntity {
     override func setup(canvasSize: Size, canvas: Canvas) {
 //Sets up the car image
         canvas.setup(car)
+        canvas.setup(appa)
 //Sets the starting X-position of the car
         middle = canvasSize.width / 2 - 83
 //Calculates where the end of the canvas is
@@ -43,9 +52,14 @@ class Car: RenderableEntity {
     
     override func render(canvas:Canvas) {
 //Renders the car
-        if car.isReady {
+        if car.isReady && !appaMode {
             car.renderMode = .destinationRect(Rect(topLeft:Point(x:middle, y:canvasEnd - 280), size:Size(width: 166, height:250)))
             canvas.render(car) 
+        }
+
+        if appa.isReady && appaMode {
+            appa.renderMode = .destinationRect(Rect(topLeft:Point(x:middle, y:canvasEnd - 280), size:Size(width: 166, height:388)))
+            canvas.render(appa) 
         }
 //If the car is told to move left, move left over the next few frames only if it is not in the leftmost lane
         if mLeft && moved < 22 && distance > -1 && !righting {
