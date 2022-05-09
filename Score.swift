@@ -1,5 +1,6 @@
 import Igis
 import Scenes
+import Foundation
 
 class Score: RenderableEntity {
 
@@ -17,6 +18,7 @@ class Score: RenderableEntity {
     var middleY = 0
 //Tracks the high score
     var highScore = 0
+    let logo: Image
     let obstacles = Obstacles()
 
 //Function to render white text
@@ -28,6 +30,12 @@ class Score: RenderableEntity {
     }
     
     init() {
+        guard let logoURL = URL(string:"https://codermerlin.com/users/avanish-jeendru/logo.png") else {
+            fatalError("Failed to create URL for logo")
+        }
+        
+        logo = Image(sourceURL: logoURL)
+
         super.init(name: "Score")
     }
 
@@ -36,6 +44,7 @@ class Score: RenderableEntity {
         xPos = canvasSize.width - 55
         middleX = canvasSize.center.x
         middleY = canvasSize.center.y
+        canvas.setup(logo)
     }
     
     override func render(canvas:Canvas) {
@@ -66,10 +75,14 @@ class Score: RenderableEntity {
         }
 //After the player loses, render the "Game Over!" box
         if layer.roadSpeed == 0 && score != 0 {
-            canvas.render(black, Rectangle(rect: Rect(topLeft: Point(x: middleX-250, y: middleY-150), size: Size(width: 500, height: 300)), fillMode: .fill))
-            renderText(canvas: canvas, x: middleX-105, y:middleY-40, text: "Game Over!")
-            renderText(canvas: canvas, x: xPos-middleX-145, y:middleY+10, text: "Your final score was \(score)")
-            renderText(canvas: canvas, x: middleX-240, y:middleY+60, text: "Press r twice to play again")
+            canvas.render(black, Rectangle(rect: Rect(topLeft: Point(x: middleX-250, y: middleY-250), size: Size(width: 500, height: 490)), fillMode: .fill))
+            if logo.isReady {
+                logo.renderMode = .destinationRect(Rect(topLeft:Point(x:middleX-228, y: middleY - 240), size:Size(width: 455, height: 260)))
+            canvas.render(logo) 
+            }
+            renderText(canvas: canvas, x: middleX-105, y:middleY+60, text: "Game Over!")
+            renderText(canvas: canvas, x: xPos-middleX-145, y:middleY+110, text: "Your final score was \(score)")
+            renderText(canvas: canvas, x: middleX-240, y:middleY+160, text: "Press r twice to play again")
 //If the current score is higher than the highscore, change the highscore
             if score > highScore {
                 highScore = score

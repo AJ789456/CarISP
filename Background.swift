@@ -17,7 +17,7 @@ class Background : RenderableEntity {
 //The color gray
     let gray = FillStyle(color:Color(.gray))
     
-    let crab: Audio
+    let music: Audio
     var isPlaying = false
 //Function to render a rectangle
     func renderRectangle(canvas: Canvas, rect: Rect, color: Color.Name) {
@@ -28,11 +28,11 @@ class Background : RenderableEntity {
     
     init() {
         // Using a meaningful name can be helpful for debugging
-        guard let crabURL = URL(string:"https://codermerlin.com/users/avanish-jeendru/CrabRave.mp3") else {
-            fatalError("Failed to create URL for Crab Rave")
+        guard let musicURL = URL(string:"https://codermerlin.com/users/avanish-jeendru/MKMusic.mp3") else {
+            fatalError("Failed to create URL for music")
         }
 
-        crab = Audio(sourceURL: crabURL, shouldLoop: true)
+        music = Audio(sourceURL: musicURL, shouldLoop: true)
         super.init(name:"Background")
     }
 
@@ -43,7 +43,7 @@ class Background : RenderableEntity {
         road.topLeft.x = canvasSize.width/2 - 330
 //The road is as tall as the canvas
         road.size.height = canvasSize.height
-        canvas.setup(crab)
+        canvas.setup(music)
     }    
     
 //Function to clear the canvas so that frames to not overlap
@@ -64,8 +64,8 @@ class Background : RenderableEntity {
         let roadRect = Rectangle(rect:road)
         canvas.render(gray, roadRect)
 
-        if !isPlaying && crab.isReady {
-            canvas.render(crab)
+        if !isPlaying && music.isReady {
+            canvas.render(music)
             isPlaying = true
         }
     }

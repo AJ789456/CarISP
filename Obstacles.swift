@@ -7,7 +7,6 @@ class Obstacles: RenderableEntity {
     let cat: Image
     let granny: Image
     let cone: Image
-    let hoes: Image
 //Randomizes which obstacle appears
     var when = 1
 //X-value of the 3 different lanes
@@ -52,11 +51,6 @@ class Obstacles: RenderableEntity {
         }
         cone = Image(sourceURL: coneURL)
 
-        guard let hoesURL = URL(string: "https://codermerlin.com/users/avanish-jeendru/hoes.png") else {
-            fatalError("Failed to create URL for hoes")
-        }
-        hoes = Image(sourceURL: hoesURL)
-        
         super.init(name: "Obstacles")
                 
     }
@@ -73,7 +67,7 @@ class Obstacles: RenderableEntity {
 //Sets the car position in the middle of the canvas
         middle = canvasSize.width / 2 - 83
 //Sets up the images
-        canvas.setup(cat, granny, cone, hoes)
+        canvas.setup(cat, granny, cone)
     }
    
     override func render(canvas:Canvas) {
@@ -134,11 +128,6 @@ class Obstacles: RenderableEntity {
             
         }
         
-//        if hoes.isReady && when == 4 {
-//            hoes.renderMode = .destinationRect(Rect(topLeft:Point(x:list[index]-75, y:yPos-150), size:Size(width: 150, height:150)))
-//            canvas.render(hoes)
-//            
-//        }
     }
     override func calculate(canvasSize: Size) {
 //Creates "containment zones" for the obstacles
