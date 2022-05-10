@@ -13,7 +13,7 @@ class InteractionLayer : Layer, KeyDownHandler {
     let score = Score()
     let obstacles = Obstacles()
 //Speed of everything
-    var roadSpeed = 5
+    var roadSpeed = 10
 //Counts the frames
     var count = 0
 
@@ -52,7 +52,7 @@ class InteractionLayer : Layer, KeyDownHandler {
         }
 //If r is clicked start up the game again
         if key == "r" && roadSpeed == 0 {
-            roadSpeed = 4
+            roadSpeed = 10
             if score.score > 9999 {
                 score.xPos += 60
             } else if score.score > 999 {
